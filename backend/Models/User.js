@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = mongoose.Schema({
+const UserSchema = mongoose.Schema({
   username: {
     required: ["true", "Please provide a username"],
     minlength: 5,
@@ -50,22 +50,22 @@ const User = mongoose.Schema({
   },
 });
 
-User.pre("save", async function () {
+UserSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-User.methods.comparePassword = async function (passwordToCheck) {
+UserSchema.methods.comparePassword = async function (passwordToCheck) {
   const isCorrect = await bcrypt.compare(passwordToCheck, this.password);
   return isCorrect;
 };
 
-User.methods.createJWT = function () {
+UserSchema.methods.createJWT = function () {
   const token = jwt.sign(
     { email: this.email, username: this.username },
     process.env.JWT_SIGN
   );
   return token;
 };
-module.exports = mongoose.model("User", User);
+module.exports = mongoose.model("User", UserSchema);
