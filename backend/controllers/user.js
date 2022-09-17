@@ -1,7 +1,6 @@
 const User = require("../Models/User");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
-const mongoose = require("mongoose");
 const crypto = require("crypto");
 
 const oneWeekInMilliseconds = 604800000;
@@ -71,8 +70,8 @@ const getUser = async (req, res) => {
   if (!id) {
     throw new CustomError.BadRequestError("Provide user's id");
   }
-  const user = await User.findById({
-    _id: mongoose.Types.ObjectId(id).toString(),
+  const user = await User.findOne({
+    _id: id,
   }).select("username email role isVerified");
   if (!user) {
     throw new CustomError.NotFoundError("User not found");
@@ -82,24 +81,19 @@ const getUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const { id } = req.params;
-  const { email } = req.user;
-  const user = await User.findOne({ email });
+  const { role } = req.user;
   let userToDelete;
-  if (user.role === "admin") {
+  if (role === "admin") {
     userToDelete = await User.findOneAndDelete({
-      _id: mongoose.Types.ObjectId(id),
+      _id: id,
     });
   } else {
-    userToDelete = await User.findOne({
-      _id: mongoose.Types.ObjectId(id),
+    userToDelete = await User.findOneAndDelete({
+      _id: id,
     });
-
-    if (userToDelete._id.toString() === id) {
-      await User.deleteOne({ _id: mongoose.Types.ObjectId(id) });
-    }
   }
 
-  if (!user || !userToDelete) {
+  if (!userToDelete) {
     throw new CustomError.NotFoundError("User not found.");
   }
 
@@ -171,11 +165,11 @@ const sendChangePassword = async (req, res) => {
 };
 
 const whoAmI = async (req, res) => {
-  const { email, username } = req.user;
+  const { email, username, role, userID } = req.user;
   if (!email || !username) {
     return res.json({ msg: "Not connected" });
   }
-  res.json({ email, username });
+  res.json({ email, username, role, userID });
 };
 
 const resetPassword = async (req, res) => {

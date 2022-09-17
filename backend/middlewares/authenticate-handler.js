@@ -19,7 +19,7 @@ const authenticateHandler = async (req, res, next) => {
     throw new CustomError.UnauthenticatedError("You are not authenticated.");
   }
 
-  req.user = { ...decodedToken, userID: user._id.toString() };
+  req.user = { ...decodedToken, userID: user._id.toString(), role: user.role };
 
   next();
 };

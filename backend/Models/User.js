@@ -48,12 +48,24 @@ const UserSchema = mongoose.Schema({
     type: Date,
     default: "",
   },
+  avatar: {
+    type: String,
+  },
 });
 
 UserSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.post("remove", async function () {
+  try {
+    await this.model("Comment").deleteMany({ user: this._id });
+    await this.model("Post").deleteMany({ user: this._id });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 UserSchema.methods.comparePassword = async function (passwordToCheck) {

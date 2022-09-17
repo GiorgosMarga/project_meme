@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const Comment = require("../Models/Comment");
 const PostSchema = mongoose.Schema(
   {
     title: {
@@ -38,4 +38,11 @@ const PostSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+PostSchema.pre("remove", async function (next) {
+  try {
+    await this.model("Comment").deleteMany({ post: this._id });
+  } catch (err) {
+    console.log(err);
+  }
+});
 module.exports = mongoose.model("Post", PostSchema);

@@ -6,6 +6,7 @@ const {
   deletePost,
   getAllPosts,
   getPost,
+  updatePost,
 } = require("../controllers/post");
 const authenticateHandler = require("../middlewares/authenticate-handler");
 const authorizeHandler = require("../middlewares/authorize-handler");
@@ -16,5 +17,6 @@ router
 router
   .route("/:id")
   .delete(authenticateHandler, deletePost)
-  .get(authenticateHandler, getPost);
+  .get(authenticateHandler, getPost)
+  .post(authenticateHandler, updatePost);
 module.exports = router;
