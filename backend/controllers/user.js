@@ -6,8 +6,11 @@ const crypto = require("crypto");
 const oneWeekInMilliseconds = 604800000;
 
 const createUser = async (req, res) => {
+  console.log("here");
   // Remove this
   const { username, email, password } = req.body;
+  console.log(req.body);
+
   if (!username || !email || !password) {
     throw new CustomError.BadRequestError(
       "Provide email, password, and username"
@@ -22,7 +25,11 @@ const createUser = async (req, res) => {
   }
   const jwtToken = user.createJWT();
   res
-    .cookie("user", jwtToken, { signed: true, httpOnly: true })
+    .cookie("user", jwtToken, {
+      signed: true,
+      httpOnly: true,
+      maxAge: new Date(Date.now() + oneWeekInMilliseconds),
+    })
     .status(StatusCodes.CREATED)
     .json({
       name: user.username,
@@ -51,9 +58,9 @@ const login = async (req, res) => {
     .cookie("user", token, {
       signed: true,
       maxAge: oneWeekDuration,
-      httpOnly: true,
+      httpOnly: false,
     })
-    .json({ msg: "Success" });
+    .json({ msg: "Success", token });
 };
 
 const logout = async (req, res) => {
@@ -134,7 +141,6 @@ const verifyEmail = async (req, res) => {
   if (!user) {
     throw new CustomError.NotFoundError("User not found");
   }
-
   if (user.otpVerifyEmail !== otp) {
     throw new CustomError.CustomApiError("Wrong OTP.");
   }
@@ -163,13 +169,35 @@ const sendChangePassword = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ msg: "Check your email!" });
 };
-
+// use whoAmI to get some fast information about the user. Used on first login to check if user exists and send the info
 const whoAmI = async (req, res) => {
-  const { email, username, role, userID } = req.user;
+  const {
+    email,
+    username,
+    role,
+    userID,
+    avatar,
+    portfolio,
+    followers,
+    following,
+    description,
+    shortDescription,
+  } = req.user;
   if (!email || !username) {
     return res.json({ msg: "Not connected" });
   }
-  res.json({ email, username, role, userID });
+  res.json({
+    email,
+    username,
+    role,
+    userID,
+    avatar,
+    portfolio,
+    followers,
+    following,
+    description,
+    shortDescription,
+  });
 };
 
 const resetPassword = async (req, res) => {
@@ -198,6 +226,24 @@ const resetPassword = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Success" });
 };
 
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { image, shortDescr, descr, portfolio } = req.body;
+  if (!id) {
+    throw new CustomError.BadRequestError("Please provide an id");
+  }
+
+  const user = await User.findOneAndUpdate(
+    { _id: id },
+    { portfolio, description: descr, shortDescription: shortDescr },
+    { new: true }
+  );
+  if (!user) {
+    throw new CustomError.NotFoundError("User doesn't exist");
+  }
+  res.status(StatusCodes.OK).json({ user, msg: "Success" });
+};
+
 module.exports = {
   createUser,
   login,
@@ -210,4 +256,5 @@ module.exports = {
   whoAmI,
   sendChangePassword,
   resetPassword,
+  updateUser,
 };

@@ -14,6 +14,7 @@ const {
   whoAmI,
   sendChangePassword,
   resetPassword,
+  updateUser,
 } = require("../controllers/user");
 
 router.route("/register").post(createUser);
@@ -28,6 +29,9 @@ router
   .route("/verify")
   .get(authenticateHandler, sendVerifyEmail)
   .post(authenticateHandler, verifyEmail);
+
+router.route("/update/:id").post(authenticateHandler, updateUser);
+
 router
   .route("/:id")
   .get(authenticateHandler, getUser)

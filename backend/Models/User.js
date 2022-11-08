@@ -51,6 +51,25 @@ const UserSchema = mongoose.Schema({
   avatar: {
     type: String,
   },
+  portfolio: {
+    type: String,
+  },
+  followers: {
+    type: Number,
+    default: 0,
+  },
+  following: {
+    type: Number,
+    default: 0,
+  },
+  description: {
+    type: "String",
+    maxlength: 600,
+  },
+  shortDescription: {
+    type: "String",
+    maxlength: 100,
+  },
 });
 
 UserSchema.pre("save", async function () {

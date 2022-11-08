@@ -7,16 +7,25 @@ const {
   getAllPosts,
   getPost,
   updatePost,
+  likePost,
+  wtfPost,
+  getUserPosts,
 } = require("../controllers/post");
 const authenticateHandler = require("../middlewares/authenticate-handler");
 const authorizeHandler = require("../middlewares/authorize-handler");
 router
   .route("/")
   .post(authenticateHandler, createPost)
-  .get(authenticateHandler, authorizeHandler, getAllPosts);
+  .get(authenticateHandler, getAllPosts);
+router.route("/like/:id").post(authenticateHandler, likePost);
+router.route("/wtf/:id").post(authenticateHandler, wtfPost);
+
+router.route("/all/:id").get(authenticateHandler, getUserPosts);
+
 router
   .route("/:id")
   .delete(authenticateHandler, deletePost)
-  .get(authenticateHandler, getPost)
-  .post(authenticateHandler, updatePost);
+  .get(authenticateHandler, authorizeHandler, getPost)
+  .post(authenticateHandler, authorizeHandler, updatePost);
+
 module.exports = router;
