@@ -17,7 +17,7 @@ const errorHandlerMiddleware = require("./middlewares/error-handler");
 
 const cookieParser = require("cookie-parser");
 
-app.get("/", (req, res) => {
+app.get("/api/v1", (req, res) => {
   res.send("Meme Project API");
 });
 app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
