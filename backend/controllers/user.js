@@ -59,6 +59,7 @@ const login = async (req, res) => {
       signed: true,
       maxAge: oneWeekDuration,
       httpOnly: false,
+      domain: "192.168.1.4",
     })
     .json({ msg: "Success", token });
 };

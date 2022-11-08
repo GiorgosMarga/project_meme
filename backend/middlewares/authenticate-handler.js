@@ -8,7 +8,7 @@ const authenticateHandler = async (req, res, next) => {
   if (!token) {
     token = req.headers?.cookies?.split("=")?.substring(3);
   }
-
+  console.log("token:", token);
   if (!token) {
     throw new CustomError.UnauthenticatedError("You are not authenticated.");
   }
