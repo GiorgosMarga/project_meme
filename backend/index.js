@@ -22,7 +22,22 @@ app.get("/api/v1", (req, res) => {
 });
 app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
 app.use(express.json());
-app.options("*", cors());
+app.options(
+  "*",
+  cors({
+    origin: [
+      "http://192.168.1.4:3000",
+      "http://192.168.1.4:3001",
+
+      "http://localhost:3001",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "PUT", "POST"],
+    optionSuccessStatus: 200,
+    credentials: true,
+    preflightContinue: true,
+  })
+);
 
 // app.use(
 //   cors({
