@@ -6,7 +6,6 @@ const crypto = require("crypto");
 const oneWeekInMilliseconds = 604800000;
 
 const createUser = async (req, res) => {
-  console.log("here");
   // Remove this
   const { username, email, password } = req.body;
   console.log(req.body);
@@ -24,6 +23,11 @@ const createUser = async (req, res) => {
     user = await User.create({ ...req.body });
   }
   const jwtToken = user.createJWT();
+  res.set({
+    "Access-Control-Allow-Origin": "http://192.168.1.4:3100",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  });
   res
     .cookie("user", jwtToken, {
       signed: true,
