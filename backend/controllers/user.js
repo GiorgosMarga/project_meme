@@ -23,11 +23,6 @@ const createUser = async (req, res) => {
     user = await User.create({ ...req.body });
   }
   const jwtToken = user.createJWT();
-  res.set({
-    "Access-Control-Allow-Origin": "http://192.168.1.4:3100",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  });
   res
     .cookie("user", jwtToken, {
       signed: true,
