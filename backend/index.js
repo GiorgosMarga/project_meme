@@ -23,19 +23,19 @@ app.get("/api/v1", (req, res) => {
 app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
 app.use(express.json());
 app.options("*", cors());
-app.use(
-  cors({
-    origin: [
-      "http://192.168.1.4:3000",
-      "http://192.168.1.4:3001",
+// app.use(
+//   cors({
+//     origin: [
+//       "http://192.168.1.4:3000",
+//       "http://192.168.1.4:3001",
 
-      "http://localhost:3001",
-      "http://localhost:3000",
-    ],
-    optionSuccessStatus: 200,
-    credentials: true,
-  })
-);
+//       "http://localhost:3001",
+//       "http://localhost:3000",
+//     ],
+//     optionSuccessStatus: 200,
+//     credentials: true,
+//   })
+// );
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/comments", commentRouter);
