@@ -66,11 +66,11 @@ const login = async (req, res) => {
       httpOnly: false,
       domain: "project-meme-frontend.vercel.app",
     })
-    .cookie("user", token, {
-      signed: true,
-      maxAge: oneWeekDuration,
-      httpOnly: false,
-    })
+    // .cookie("user", token, {
+    //   signed: true,
+    //   maxAge: oneWeekDuration,
+    //   httpOnly: false,
+    // })
     .json({ msg: "Success", token });
 };
 
