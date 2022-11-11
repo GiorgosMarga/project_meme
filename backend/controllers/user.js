@@ -33,7 +33,7 @@ const createUser = async (req, res) => {
     .cookie("user", token, {
       signed: true,
       maxAge: oneWeekDuration,
-      httpOnly: true,
+      httpOnly: false,
     })
     .status(StatusCodes.CREATED)
     .json({
@@ -64,12 +64,12 @@ const login = async (req, res) => {
       signed: true,
       maxAge: oneWeekDuration,
       httpOnly: false,
-      domain: "192.168.1.4",
+      domain: "project-meme-frontend.vercel.app",
     })
     .cookie("user", token, {
       signed: true,
       maxAge: oneWeekDuration,
-      httpOnly: true,
+      httpOnly: false,
     })
     .json({ msg: "Success", token });
 };
