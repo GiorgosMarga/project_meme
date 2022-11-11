@@ -32,7 +32,7 @@ const createUser = async (req, res) => {
     })
     .cookie("user2", jwtToken, {
       signed: true,
-      maxAge: oneWeekDuration,
+      maxAge: new Date(Date.now() + oneWeekInMilliseconds),
       httpOnly: false,
     })
     .status(StatusCodes.CREATED)
