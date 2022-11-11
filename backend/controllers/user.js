@@ -28,6 +28,7 @@ const createUser = async (req, res) => {
       signed: true,
       httpOnly: true,
       maxAge: new Date(Date.now() + oneWeekInMilliseconds),
+      domain: "192.168.1.4",
     })
     .status(StatusCodes.CREATED)
     .json({
