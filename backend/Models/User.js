@@ -97,7 +97,6 @@ UserSchema.methods.createJWT = function () {
     { email: this.email, username: this.username },
     process.env.JWT_SIGN
   );
-  console.log(token);
   return token;
 };
 module.exports = mongoose.model("User", UserSchema);

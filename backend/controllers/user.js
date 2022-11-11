@@ -2,9 +2,9 @@ const User = require("../Models/User");
 const { StatusCodes } = require("http-status-codes");
 const CustomError = require("../errors");
 const crypto = require("crypto");
-
+const cookie = require("cookie");
 const oneWeekInMilliseconds = 604800000;
-
+const signature = require("cookie-signature");
 const createUser = async (req, res) => {
   // Remove this
   const { username, email, password } = req.body;
@@ -26,12 +26,6 @@ const createUser = async (req, res) => {
   res
     .cookie("user", jwtToken, {
       signed: true,
-      httpOnly: false,
-      maxAge: new Date(Date.now() + oneWeekInMilliseconds),
-      domain: "192.168.1.4",
-    })
-    .cookie("user2", jwtToken, {
-      signed: true,
       maxAge: new Date(Date.now() + oneWeekInMilliseconds),
       httpOnly: false,
     })
@@ -40,7 +34,12 @@ const createUser = async (req, res) => {
       name: user.username,
       email: user.email,
       msg: "User Created Successfully",
+      cookie: cookie.serialize(
+        `user`,
+        String(signature.sign(jwtToken, process.env.COOKIE_SIGN))
+      ),
     });
+  console.log(signature.sign(jwtToken, process.env.COOKIE_SIGN));
 };
 
 const login = async (req, res) => {

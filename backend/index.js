@@ -16,6 +16,7 @@ const notFoundMiddleware = require("./middlewares/not-found");
 const errorHandlerMiddleware = require("./middlewares/error-handler");
 
 const cookieParser = require("cookie-parser");
+const cookieMiddleware = require("./middlewares/cookie-handler.js");
 
 app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(
     credentials: true,
   })
 );
+app.use(cookieMiddleware);
 app.get("/api/v1", (req, res) => {
   res.send("Meme Project API");
 });

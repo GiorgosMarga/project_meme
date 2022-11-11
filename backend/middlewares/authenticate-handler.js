@@ -2,13 +2,10 @@ const CustomError = require("../errors");
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
 const authenticateHandler = async (req, res, next) => {
-  let token = req.signedCookies["user"];
-
+  let token = req.signedCookies["user"] || req.cookies.user;
+  console.log({ cookies: req.cookies });
   // If the request is coming from the serversideprops, token needs to be retrieved from headers
-  if (!token) {
-    token = req.headers?.cookies?.split("=")?.substring(3);
-  }
-  console.log({ token });
+
   if (!token) {
     throw new CustomError.UnauthenticatedError("You are not authenticated.");
   }
