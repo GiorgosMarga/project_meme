@@ -27,6 +27,7 @@ app.use(
       "http://192.168.1.4:3001",
       "http://localhost:3001",
       "http://localhost:3000",
+      "https://project-meme-frontend.vercel.app",
     ],
     credentials: true,
   })
