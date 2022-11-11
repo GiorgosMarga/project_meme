@@ -30,7 +30,7 @@ const createUser = async (req, res) => {
       maxAge: new Date(Date.now() + oneWeekInMilliseconds),
       domain: "192.168.1.4",
     })
-    .cookie("user", token, {
+    .cookie("user2", jwtToken, {
       signed: true,
       maxAge: oneWeekDuration,
       httpOnly: false,
