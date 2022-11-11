@@ -23,22 +23,15 @@ const createUser = async (req, res) => {
     user = await User.create({ ...req.body });
   }
   const jwtToken = user.createJWT();
-  res
-    .cookie("user", jwtToken, {
-      signed: true,
-      maxAge: new Date(Date.now() + oneWeekInMilliseconds),
-      httpOnly: false,
-    })
-    .status(StatusCodes.CREATED)
-    .json({
-      name: user.username,
-      email: user.email,
-      msg: "User Created Successfully",
-      cookie: cookie.serialize(
-        `user`,
-        String(signature.sign(jwtToken, process.env.COOKIE_SIGN))
-      ),
-    });
+  res.status(StatusCodes.CREATED).json({
+    name: user.username,
+    email: user.email,
+    msg: "User Created Successfully",
+    cookie: cookie.serialize(
+      `user`,
+      String(signature.sign(jwtToken, process.env.COOKIE_SIGN))
+    ),
+  });
   console.log(signature.sign(jwtToken, process.env.COOKIE_SIGN));
 };
 
@@ -70,7 +63,14 @@ const login = async (req, res) => {
     //   maxAge: oneWeekDuration,
     //   httpOnly: false,
     // })
-    .json({ msg: "Success", token });
+    .json({
+      msg: "Success",
+      token,
+      cookie: cookie.serialize(
+        `user`,
+        String(signature.sign(token, process.env.COOKIE_SIGN))
+      ),
+    });
 };
 
 const logout = async (req, res) => {
