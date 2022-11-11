@@ -22,14 +22,8 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: [
-      "http://192.168.1.4:3000",
-      "http://192.168.1.4:3001",
-
-      "http://localhost:3001",
-      "http://localhost:3000",
-    ],
-    optionSuccessStatus: 500,
+    origin: "*",
+    optionSuccessStatus: 204,
     credentials: true,
   })
 );
