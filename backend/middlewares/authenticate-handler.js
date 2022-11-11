@@ -10,7 +10,9 @@ const authenticateHandler = async (req, res, next) => {
   }
   console.log("token:", token);
   if (!token) {
-    throw new CustomError.UnauthenticatedError("You are not authenticated.");
+    throw new CustomError.UnauthenticatedError(
+      "You are not authenticated asdas."
+    );
   }
   let decodedToken;
   let user;
@@ -19,10 +21,14 @@ const authenticateHandler = async (req, res, next) => {
     const { email } = decodedToken;
     user = await User.findOne({ email });
     if (!user) {
-      throw new CustomError.UnauthenticatedError("You are not authenticated.");
+      throw new CustomError.UnauthenticatedError(
+        "You are not authenticated asdasd."
+      );
     }
   } catch (err) {
-    throw new CustomError.UnauthenticatedError("You are not authenticated.");
+    throw new CustomError.UnauthenticatedError(
+      "You are not authenticated asdas."
+    );
   }
 
   req.user = {
