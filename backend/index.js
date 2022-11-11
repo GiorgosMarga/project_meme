@@ -5,7 +5,7 @@ require("express-async-errors");
 const express = require("express");
 const app = express();
 const connectDB = require("./database/connectDB");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 const cors = require("cors");
 const userRouter = require("./routers/user");
 const postRouter = require("./routers/post");
@@ -25,11 +25,9 @@ app.use(
     origin: [
       "http://192.168.1.4:3000",
       "http://192.168.1.4:3001",
-
       "http://localhost:3001",
       "http://localhost:3000",
     ],
-    optionSuccessStatus: 204,
     credentials: true,
   })
 );

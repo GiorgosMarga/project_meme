@@ -8,7 +8,6 @@ const oneWeekInMilliseconds = 604800000;
 const createUser = async (req, res) => {
   // Remove this
   const { username, email, password } = req.body;
-  console.log(req.body);
 
   if (!username || !email || !password) {
     throw new CustomError.BadRequestError(
@@ -16,6 +15,7 @@ const createUser = async (req, res) => {
     );
   }
   const isAdmin = (await User.find({})).length;
+
   let user;
   if (isAdmin === 0) {
     user = await User.create({ ...req.body, role: "admin" });
@@ -26,9 +26,14 @@ const createUser = async (req, res) => {
   res
     .cookie("user", jwtToken, {
       signed: true,
-      httpOnly: true,
+      httpOnly: false,
       maxAge: new Date(Date.now() + oneWeekInMilliseconds),
       domain: "192.168.1.4",
+    })
+    .cookie("user", token, {
+      signed: true,
+      maxAge: oneWeekDuration,
+      httpOnly: true,
     })
     .status(StatusCodes.CREATED)
     .json({
@@ -60,6 +65,11 @@ const login = async (req, res) => {
       maxAge: oneWeekDuration,
       httpOnly: false,
       domain: "192.168.1.4",
+    })
+    .cookie("user", token, {
+      signed: true,
+      maxAge: oneWeekDuration,
+      httpOnly: true,
     })
     .json({ msg: "Success", token });
 };

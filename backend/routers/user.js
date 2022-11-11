@@ -16,7 +16,6 @@ const {
   resetPassword,
   updateUser,
 } = require("../controllers/user");
-
 router.route("/register").post(createUser);
 router.route("/login").post(login);
 router.route("/logout").get(logout);
