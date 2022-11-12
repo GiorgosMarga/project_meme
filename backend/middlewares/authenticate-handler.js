@@ -3,7 +3,7 @@ const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
 const authenticateHandler = async (req, res, next) => {
   let token = req.signedCookies["user"] || req.cookies.user;
-  console.log({ cookies: req.cookies });
+
   // If the request is coming from the serversideprops, token needs to be retrieved from headers
 
   if (!token) {
@@ -15,6 +15,7 @@ const authenticateHandler = async (req, res, next) => {
     decodedToken = jwt.verify(token, process.env.JWT_SIGN);
     const { email } = decodedToken;
     user = await User.findOne({ email });
+
     if (!user) {
       throw new CustomError.UnauthenticatedError("You are not authenticated.");
     }

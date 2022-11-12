@@ -52,4 +52,14 @@ const updateComment = async (req, res) => {
   res.status(StatusCodes.OK).json({ comment, msg: "Updated Successfully!" });
 };
 
-module.exports = { createComment, deleteComment, updateComment };
+const getPostComments = async (req, res) => {
+  const { id } = req.params;
+  const comments = await Comment.findOne({ id });
+  res.status(StatusCodes.OK).json({ comments });
+};
+module.exports = {
+  createComment,
+  deleteComment,
+  updateComment,
+  getPostComments,
+};

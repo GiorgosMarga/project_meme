@@ -36,6 +36,7 @@ const deletePost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
   const { page } = req.query;
+  console.log(req);
 
   const posts = await Post.find({})
     .sort({ createdAt: -1 })
