@@ -89,7 +89,9 @@ const getUser = async (req, res) => {
   }
   const user = await User.findOne({
     _id: id,
-  }).select("username email role isVerified");
+  }).select(
+    "username avatar portfolio followers following description shortDescription"
+  );
   if (!user) {
     throw new CustomError.NotFoundError("User not found");
   }
