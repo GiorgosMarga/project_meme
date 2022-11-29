@@ -125,7 +125,7 @@ const deleteUser = async (req, res) => {
 const sendVerifyEmail = async (req, res) => {
   const { email } = req.user;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate("_id");
 
   // User might have been deleted. Put that in verify jwt.
   if (!user) {
