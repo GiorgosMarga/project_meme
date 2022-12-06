@@ -256,6 +256,15 @@ const updateUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user, msg: "Success" });
 };
 
+const findUsers = async (req, res) => {
+  const { prefix } = req.query;
+
+  const users = await User.find({
+    username: { $regex: `^${prefix}`, $options: "i" },
+  });
+  res.status(StatusCodes.OK).json({ users });
+};
+
 module.exports = {
   createUser,
   login,
@@ -269,4 +278,5 @@ module.exports = {
   sendChangePassword,
   resetPassword,
   updateUser,
+  findUsers,
 };

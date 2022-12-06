@@ -15,6 +15,7 @@ const {
   sendChangePassword,
   resetPassword,
   updateUser,
+  findUsers,
 } = require("../controllers/user");
 router.route("/register").post(createUser);
 router.route("/login").post(login);
@@ -22,6 +23,7 @@ router.route("/logout").get(logout);
 router.route("/me").get(authenticateHandler, whoAmI);
 router.route("/password").post(sendChangePassword);
 router.route("/reset-password").post(resetPassword);
+router.route("/findUsers").get(authenticateHandler, findUsers);
 router.route("/").get(authenticateHandler, authorizeHandler, getAllUsers);
 
 router
@@ -29,7 +31,7 @@ router
   .get(authenticateHandler, sendVerifyEmail)
   .post(authenticateHandler, verifyEmail);
 
-router.route("/update/:id").post(authenticateHandler, updateUser);
+// router.route("/update/:id").update(authenticateHandler, updateUser);
 
 router
   .route("/:id")
