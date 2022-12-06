@@ -4,6 +4,7 @@ const cookieMiddleware = async (req, res, next) => {
   if (!req?.headers?.cookies) {
     return next();
   }
+  console.time("cookies handler");
   const cookies = req.headers.cookies.split(";");
 
   for (let cookieIter of cookies) {
@@ -26,6 +27,7 @@ const cookieMiddleware = async (req, res, next) => {
       req.cookies[cookieName] = splitCookie[1];
     }
   }
+  console.timeEnd("cookies handler");
 
   next();
 };

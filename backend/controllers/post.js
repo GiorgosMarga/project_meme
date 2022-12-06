@@ -35,21 +35,17 @@ const deletePost = async (req, res) => {
 };
 
 const getAllPosts = async (req, res) => {
-  const { page } = req.query;
-
-  const posts = await Post.find({})
+  console.time("req posts");
+  const { page = 1, limit = 10 } = req.query;
+  const posts = await Post.find()
     .sort({ createdAt: -1 })
-    .populate("comments user", "username image");
-
-  if (page) {
-    const limitedPosts = posts.slice(page * 10, page * 10 + 10);
-
-    return res
-      .status(StatusCodes.OK)
-      .json({ posts: limitedPosts, n: limitedPosts.length });
-  }
-  console.log(posts);
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .populate("comments user", "username image")
+    .exec();
   res.status(StatusCodes.OK).json({ posts, n: posts.length });
+
+  console.timeEnd("req posts");
 };
 
 const getPost = async (req, res) => {

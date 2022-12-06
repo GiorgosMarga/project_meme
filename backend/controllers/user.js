@@ -14,14 +14,7 @@ const createUser = async (req, res) => {
       "Provide email, password, and username"
     );
   }
-  const isAdmin = (await User.find({})).length;
-
-  let user;
-  if (isAdmin === 0) {
-    user = await User.create({ ...req.body, role: "admin" });
-  } else {
-    user = await User.create({ ...req.body });
-  }
+  const user = await User.create({ ...req.body });
   const jwtToken = user.createJWT();
   res.status(StatusCodes.CREATED).json({
     name: user.username,
@@ -32,7 +25,6 @@ const createUser = async (req, res) => {
       String(signature.sign(jwtToken, process.env.COOKIE_SIGN))
     ),
   });
-  console.log(signature.sign(jwtToken, process.env.COOKIE_SIGN));
 };
 
 const login = async (req, res) => {
@@ -84,6 +76,7 @@ const getAllUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   const { id } = req.params;
+  console.time("overall");
   if (!id) {
     throw new CustomError.BadRequestError("Provide user's id");
   }
@@ -96,6 +89,7 @@ const getUser = async (req, res) => {
     throw new CustomError.NotFoundError("User not found");
   }
   res.status(StatusCodes.OK).json({ user });
+  console.timeEnd("overall");
 };
 
 const deleteUser = async (req, res) => {

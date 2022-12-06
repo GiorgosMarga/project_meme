@@ -2,6 +2,7 @@ const CustomError = require("../errors");
 const User = require("../Models/User");
 const jwt = require("jsonwebtoken");
 const authenticateHandler = async (req, res, next) => {
+  console.time("authenticate handler");
   let token = req.signedCookies["user"] || req.cookies.user;
 
   // If the request is coming from the serversideprops, token needs to be retrieved from headers
@@ -34,6 +35,7 @@ const authenticateHandler = async (req, res, next) => {
     description: user.description,
     shortDescription: user.shortDescription,
   };
+  console.timeEnd("authenticate handler");
 
   next();
 };
