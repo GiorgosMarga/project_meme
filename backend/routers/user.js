@@ -31,7 +31,7 @@ router
   .get(authenticateHandler, sendVerifyEmail)
   .post(authenticateHandler, verifyEmail);
 
-// router.route("/update/:id").update(authenticateHandler, updateUser);
+router.route("/update/:id").post(authenticateHandler, updateUser);
 
 router
   .route("/:id")
