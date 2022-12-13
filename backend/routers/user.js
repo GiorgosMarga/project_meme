@@ -25,9 +25,7 @@ router.route("/me").get(authenticateHandler, whoAmI);
 router.route("/password").post(sendChangePassword);
 router.route("/reset-password").post(resetPassword);
 router.route("/findUsers").get(authenticateHandler, findUsers);
-router
-  .route("/uploadProfileImage")
-  .post(authenticateHandler, uploadProfileImage);
+router.route("/uploadProfileImage").post(uploadProfileImage);
 router.route("/").get(authenticateHandler, authorizeHandler, getAllUsers);
 
 router

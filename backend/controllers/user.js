@@ -5,6 +5,8 @@ const crypto = require("crypto");
 const cookie = require("cookie");
 const oneWeekInMilliseconds = 604800000;
 const signature = require("cookie-signature");
+const cloudinary = require("cloudinary");
+const fs = require("fs");
 const createUser = async (req, res) => {
   // Remove this
   const { username, email, password } = req.body;
@@ -260,9 +262,36 @@ const findUsers = async (req, res) => {
 };
 
 const uploadProfileImage = async (req, res) => {
-  console.log(req.files);
-  console.log(req);
-  res.send("hi");
+  let result;
+  console.log(req.query);
+  const user = req.query.user;
+  if (!req.files.profileImage) {
+    throw new CustomError.BadRequestError("Please upload an image.");
+  }
+  if (req.files.profileImage.mimetype.split("/")[0] !== "image") {
+    throw new CustomError.BadRequestError("Unsupported image file.");
+  }
+  try {
+    result = await cloudinary.uploader.upload(
+      req.files.profileImage.tempFilePath,
+      {
+        use_filename: true,
+        folder: "project_meme",
+      }
+    );
+    fs.unlinkSync(req.files.profileImage.tempFilePath);
+  } catch (error) {
+    console.log(error);
+  }
+
+  // update user image
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: user },
+    { avatar: result.secure_url },
+    { new: true }
+  );
+  console.log({ result, updatedUser, user });
+  res.json({ result, updateUser, user });
 };
 module.exports = {
   createUser,
