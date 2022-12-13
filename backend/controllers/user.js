@@ -259,6 +259,11 @@ const findUsers = async (req, res) => {
   res.status(StatusCodes.OK).json({ users });
 };
 
+const uploadProfileImage = async (req, res) => {
+  console.log(req.files);
+  console.log(req);
+  res.send("hi");
+};
 module.exports = {
   createUser,
   login,
@@ -273,4 +278,5 @@ module.exports = {
   resetPassword,
   updateUser,
   findUsers,
+  uploadProfileImage,
 };

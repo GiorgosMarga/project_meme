@@ -2,6 +2,7 @@
 // Do we want to remove users from like and wtf lists after we delete the user ?
 require("dotenv").config();
 require("express-async-errors");
+
 const express = require("express");
 const app = express();
 const connectDB = require("./database/connectDB");
@@ -12,15 +13,23 @@ const postRouter = require("./routers/post");
 const commentRouter = require("./routers/comments");
 const answerRouter = require("./routers/answer");
 
+const fileUpload = require("express-fileupload");
+// USE V2
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
+
 const notFoundMiddleware = require("./middlewares/not-found");
 const errorHandlerMiddleware = require("./middlewares/error-handler");
 
 const cookieParser = require("cookie-parser");
 const cookieMiddleware = require("./middlewares/cookie-handler.js");
-
 app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
 app.use(express.json());
-
+app.use(fileUpload({ useTempFiles: true }));
 app.use(
   cors({
     origin: [
