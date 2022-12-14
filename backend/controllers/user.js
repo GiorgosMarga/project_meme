@@ -263,8 +263,8 @@ const findUsers = async (req, res) => {
 
 const uploadProfileImage = async (req, res) => {
   let result;
-  console.log(req.query);
   const user = req.query.user;
+  console.log(req.files);
   if (!req.files.profileImage) {
     throw new CustomError.BadRequestError("Please upload an image.");
   }
@@ -279,9 +279,9 @@ const uploadProfileImage = async (req, res) => {
         folder: "project_meme",
       }
     );
-    fs.unlinkSync(req.files.profileImage.tempFilePath);
+    // fs.unlinkSync(req.files.profileImage.tempFilePath);
   } catch (error) {
-    console.log(error);
+    return res.status(StatusCodes.CONFLICT).json({ error });
   }
 
   // update user image
@@ -290,8 +290,7 @@ const uploadProfileImage = async (req, res) => {
     { avatar: result.secure_url },
     { new: true }
   );
-  console.log({ result, updatedUser, user });
-  res.json({ result, updateUser, user });
+  res.status(StatusCodes.OK).json({ result, updateUser, user });
 };
 module.exports = {
   createUser,
