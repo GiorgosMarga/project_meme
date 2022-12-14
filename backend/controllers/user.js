@@ -264,16 +264,15 @@ const findUsers = async (req, res) => {
 const uploadProfileImage = async (req, res) => {
   let result;
   const user = req.query.user;
-  console.log(req.files);
-  if (!req.files.profileImage) {
+  if (!req?.files?.profileImage) {
     throw new CustomError.BadRequestError("Please upload an image.");
   }
-  if (req.files.profileImage.mimetype.split("/")[0] !== "image") {
+  if (req?.files?.profileImage?.mimetype?.split("/")[0] !== "image") {
     throw new CustomError.BadRequestError("Unsupported image file.");
   }
   try {
     result = await cloudinary.uploader.upload(
-      req.files.profileImage.tempFilePath,
+      req?.files?.profileImage?.tempFilePath,
       {
         use_filename: true,
         folder: "project_meme",
@@ -290,7 +289,7 @@ const uploadProfileImage = async (req, res) => {
     { avatar: result.secure_url },
     { new: true }
   );
-  res.status(StatusCodes.OK).json({ result, updateUser, user });
+  res.status(StatusCodes.OK).json({ result, updatedUser, user });
 };
 module.exports = {
   createUser,
