@@ -262,34 +262,38 @@ const findUsers = async (req, res) => {
 };
 
 const uploadProfileImage = async (req, res) => {
-  let result;
-  const user = req.query.user;
-  if (!req?.files?.profileImage) {
-    throw new CustomError.BadRequestError("Please upload an image.");
-  }
-  if (req?.files?.profileImage?.mimetype?.split("/")[0] !== "image") {
-    throw new CustomError.BadRequestError("Unsupported image file.");
-  }
   try {
-    result = await cloudinary.uploader.upload(
-      req?.files?.profileImage?.tempFilePath,
-      {
-        use_filename: true,
-        folder: "project_meme",
-      }
-    );
-    // fs.unlinkSync(req.files.profileImage.tempFilePath);
-  } catch (error) {
-    return res.status(StatusCodes.CONFLICT).json({ error });
-  }
+    let result;
+    const user = req.query.user;
+    if (!req?.files?.profileImage) {
+      throw new CustomError.BadRequestError("Please upload an image.");
+    }
+    if (req?.files?.profileImage?.mimetype?.split("/")[0] !== "image") {
+      throw new CustomError.BadRequestError("Unsupported image file.");
+    }
+    try {
+      result = await cloudinary.uploader.upload(
+        req?.files?.profileImage?.tempFilePath,
+        {
+          use_filename: true,
+          folder: "project_meme",
+        }
+      );
+      // fs.unlinkSync(req.files.profileImage.tempFilePath);
+    } catch (error) {
+      return res.status(StatusCodes.CONFLICT).json({ error });
+    }
 
-  // update user image
-  const updatedUser = await User.findOneAndUpdate(
-    { _id: user },
-    { avatar: result.secure_url },
-    { new: true }
-  );
-  res.status(StatusCodes.OK).json({ result, updatedUser, user });
+    // update user image
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: user },
+      { avatar: result.secure_url },
+      { new: true }
+    );
+    res.status(StatusCodes.OK).json({ result, updatedUser, user });
+  } catch (err) {
+    return res.status(StatusCodes.OK).json({ err });
+  }
 };
 module.exports = {
   createUser,
