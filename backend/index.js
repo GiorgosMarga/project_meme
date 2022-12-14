@@ -40,6 +40,7 @@ app.use(
       "https://project-meme-frontend.vercel.app",
     ],
     credentials: true,
+    allowedHeaders: "*",
   })
 );
 app.use(cookieMiddleware);

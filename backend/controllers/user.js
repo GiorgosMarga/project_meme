@@ -264,6 +264,7 @@ const findUsers = async (req, res) => {
 const uploadProfileImage = async (req, res) => {
   let result;
   const user = req.query.user;
+  console.log(req.files);
   if (!req?.files?.profileImage) {
     throw new CustomError.BadRequestError("Please upload an image.");
   }
@@ -278,7 +279,7 @@ const uploadProfileImage = async (req, res) => {
         folder: "project_meme",
       }
     );
-    // fs.unlinkSync(req.files.profileImage.tempFilePath);
+    fs.unlinkSync(req.files.profileImage.tempFilePath);
   } catch (error) {
     return res.status(StatusCodes.CONFLICT).json({ error });
   }
