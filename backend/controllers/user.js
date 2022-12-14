@@ -292,7 +292,7 @@ const uploadProfileImage = async (req, res) => {
     );
     res.status(StatusCodes.OK).json({ result, updatedUser, user });
   } catch (err) {
-    return res.status(StatusCodes.OK).json({ err });
+    return res.status(StatusCodes.OK).json({ err, msg: "outer error" });
   }
 };
 module.exports = {
