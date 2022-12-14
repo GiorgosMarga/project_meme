@@ -262,6 +262,7 @@ const findUsers = async (req, res) => {
 };
 
 const uploadProfileImage = async (req, res) => {
+  return res.json({ msg: "hi" });
   try {
     let result;
     const user = req.query.user;
