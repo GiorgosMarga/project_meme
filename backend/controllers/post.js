@@ -6,7 +6,7 @@ const createPost = async (req, res) => {
   const { userID } = req.user;
   const post = await (
     await Post.create({ ...req.body, user: userID })
-  ).populate("user", "username");
+  ).populate("user", "username avatar");
   res
     .status(StatusCodes.CREATED)
     .json({ post, msg: "Post was created successfully" });
