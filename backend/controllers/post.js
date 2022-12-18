@@ -41,7 +41,7 @@ const getAllPosts = async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(limit * 1)
     .skip((page - 1) * limit)
-    .populate("comments user", "username image")
+    .populate("comments user", "username image avatar")
     .exec();
   res.status(StatusCodes.OK).json({ posts, n: posts.length });
 
