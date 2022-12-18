@@ -55,7 +55,7 @@ const updateComment = async (req, res) => {
 const getPostComments = async (req, res) => {
   const { id } = req.params;
   console.log(id);
-  const comments = await Comment.find({ post: id });
+  const comments = await Comment.find({ post: id }).populate("user");
   res.status(StatusCodes.OK).json({ comments });
 };
 module.exports = {
