@@ -55,6 +55,7 @@ const updateAnswer = async (req, res) => {
 
   res.status(StatusCodes.OK).json({ answer, msg: "Success" });
 };
+
 module.exports = {
   createAnswer,
   deleteAnswer,
