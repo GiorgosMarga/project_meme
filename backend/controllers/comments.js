@@ -2,6 +2,7 @@ const Post = require("../Models/Post");
 const Comment = require("../Models/Comment");
 const CustomError = require("../errors");
 const { StatusCodes } = require("http-status-codes");
+
 const createComment = async (req, res) => {
   const { userID } = req.user;
   const { id } = req.params;
@@ -57,10 +58,16 @@ const getPostComments = async (req, res) => {
   console.log(id);
   const comments = await Comment.find({ post: id })
     .populate({
+      path: "answers",
+    })
+    .populate({
+      path: "answers",
+    })
+    .populate({
       path: "user",
       select: "username avatar",
-    })
-    .populate("answers");
+    });
+
   res.status(StatusCodes.OK).json({ comments });
 };
 module.exports = {

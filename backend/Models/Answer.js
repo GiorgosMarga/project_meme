@@ -1,22 +1,25 @@
 const mongoose = require("mongoose");
 
-const answerSchema = mongoose.Schema({
-  user: {
-    type: mongoose.Types.ObjectId,
-    ref: "Comment",
-    required: true,
+const answerSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    comment: {
+      type: mongoose.Types.ObjectId,
+      ref: "comment",
+      required: true,
+    },
+    answer: {
+      type: String,
+      required: [true, "Please provide a comment"],
+      maxlength: 300,
+    },
   },
-  comment: {
-    type: mongoose.Types.ObjectId,
-    ref: "comment",
-    required: true,
-  },
-  answer: {
-    type: String,
-    required: [true, "Please provide a comment"],
-    maxlength: 300,
-  },
-});
+  { timestamps: true }
+);
 
 answerSchema.post("save", async function () {
   try {
