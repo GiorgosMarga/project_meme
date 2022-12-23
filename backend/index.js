@@ -52,7 +52,7 @@ if (cluster.isMaster) {
     next();
   });
   app.get("/serverID", (req, res) => {
-    res.code(200).json({ id: process.pid });
+    res.status(200).json({ id: process.pid });
   });
   app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
   app.use(express.json());
