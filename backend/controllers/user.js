@@ -272,7 +272,6 @@ const uploadProfileImage = async (req, res) => {
   // if (req?.files?.profileImage?.mimetype?.split("/")[0] !== "image") {
   //   throw new CustomError.BadRequestError("Unsupported image file.");
   // }
-  console.log(`data:image/jpeg;base64,${base64}`);
   try {
     result = await cloudinary.uploader.upload(base64);
   } catch (error) {

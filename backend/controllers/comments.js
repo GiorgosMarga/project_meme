@@ -59,10 +59,6 @@ const getPostComments = async (req, res) => {
   const comments = await Comment.find({ post: id })
     .populate({
       path: "answers",
-      populate: {
-        path: "user",
-        select: "avatar",
-      },
     })
     .populate({
       path: "user",
