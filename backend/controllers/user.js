@@ -191,21 +191,25 @@ const whoAmI = async (req, res) => {
     description,
     shortDescription,
   } = req.user;
-  if (!email || !username) {
-    return res.json({ msg: "Not connected" });
+  try {
+    if (!email || !username) {
+      return res.json({ msg: "Not connected" });
+    }
+    res.json({
+      email,
+      username,
+      role,
+      userID,
+      avatar,
+      portfolio,
+      followers,
+      following,
+      description,
+      shortDescription,
+    });
+  } catch (err) {
+    res.status(StatusCodes.BAD_REQUEST).json({ err });
   }
-  res.json({
-    email,
-    username,
-    role,
-    userID,
-    avatar,
-    portfolio,
-    followers,
-    following,
-    description,
-    shortDescription,
-  });
 };
 
 const resetPassword = async (req, res) => {
