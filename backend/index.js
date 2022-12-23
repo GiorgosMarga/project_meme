@@ -61,7 +61,7 @@ if (cluster.isMaster) {
     })
   );
   app.use(cookieMiddleware);
-  app.get("/api/v1/config", (req, res) => res.json({ totalCPUs }));
+  // app.get("/api/v1/config", (req, res) => res.json({ totalCPUs }));
   app.get("/api/v1", (req, res) => {
     res.send("Meme Project API");
   });
