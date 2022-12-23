@@ -3,6 +3,7 @@
 
 require("dotenv").config();
 require("express-async-errors");
+const process = require("node:process");
 const express = require("express");
 const cors = require("cors");
 const userRouter = require("./routers/user");
@@ -27,6 +28,7 @@ const cookieParser = require("cookie-parser");
 const cookieMiddleware = require("./middlewares/cookie-handler.js");
 
 const cluster = require("cluster");
+const { nextTick } = require("node:process");
 const totalCPUs = require("os").cpus().length;
 
 if (cluster.isMaster) {
@@ -45,7 +47,10 @@ if (cluster.isMaster) {
   });
 } else {
   const app = express();
-
+  app.use((req, res, next) => {
+    res.set("server_id", process.pid);
+    next();
+  });
   app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
   app.use(express.json());
   app.use(fileUpload({ useTempFiles: true }));
