@@ -5,6 +5,7 @@ require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
 const cors = require("cors");
+const process = require("node:process");
 const userRouter = require("./routers/user");
 const postRouter = require("./routers/post");
 const commentRouter = require("./routers/comments");
@@ -28,7 +29,6 @@ const cookieMiddleware = require("./middlewares/cookie-handler.js");
 
 const cluster = require("cluster");
 const totalCPUs = require("os").cpus().length;
-const process = require("node:process");
 
 if (cluster.isMaster) {
   console.log(`Number of CPUs is ${totalCPUs}`);
@@ -56,7 +56,6 @@ if (cluster.isMaster) {
         "https://project-meme-frontend.vercel.app",
       ],
       credentials: true,
-      allowedHeaders: ["Content-Type", "Accept", "Cookies"],
     })
   );
   app.use((req, res, next) => {
