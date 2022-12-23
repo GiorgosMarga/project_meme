@@ -47,16 +47,6 @@ if (cluster.isMaster) {
   });
 } else {
   const app = express();
-  app.use((req, res, next) => {
-    res.set("server_id", process.pid);
-    next();
-  });
-  app.get("/serverID", (req, res) => {
-    res.status(200).json({ id: process.pid });
-  });
-  app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
-  app.use(express.json());
-  app.use(fileUpload({ useTempFiles: true }));
   app.use(
     cors({
       origin: [
@@ -69,6 +59,17 @@ if (cluster.isMaster) {
       credentials: true,
     })
   );
+  app.use((req, res, next) => {
+    res.set("server_id", process.pid);
+    next();
+  });
+  app.get("/serverID", (req, res) => {
+    res.status(200).json({ id: process.pid });
+  });
+  app.use(cookieParser(process.env.COOKIE_SIGN, { sameSite: "none" }));
+  app.use(express.json());
+  app.use(fileUpload({ useTempFiles: true }));
+
   app.use(cookieMiddleware);
   // app.get("/api/v1/config", (req, res) => res.json({ totalCPUs }));
   app.get("/api/v1", (req, res) => {
