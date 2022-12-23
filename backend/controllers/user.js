@@ -30,42 +30,45 @@ const createUser = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  return res.send("yes");
-  const { email, password } = req.body;
-  if (!email || !password) {
-    throw new CustomError.BadRequestError("Provide email and password");
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new CustomError.BadRequestError("Provide email and password");
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new CustomError.NotFoundError("Invalid credentials");
+    }
+    const isPasswordCorrect = await user.comparePassword(password);
+    if (!isPasswordCorrect) {
+      throw new CustomError.NotFoundError("Invalid credentials");
+    }
+    const token = user.createJWT();
+    const oneWeekDuration = new Date(Date.now() + oneWeekInMilliseconds);
+    res
+      .status(StatusCodes.OK)
+      .cookie("user", token, {
+        signed: true,
+        maxAge: oneWeekDuration,
+        httpOnly: false,
+        domain: "project-meme-frontend.vercel.app",
+      })
+      // .cookie("user", token, {
+      //   signed: true,
+      //   maxAge: oneWeekDuration,
+      //   httpOnly: false,
+      // })
+      .json({
+        msg: "Success",
+        token,
+        cookie: cookie.serialize(
+          `user`,
+          String(signature.sign(token, process.env.COOKIE_SIGN))
+        ),
+      });
+  } catch (err) {
+    res.json({ err });
   }
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw new CustomError.NotFoundError("Invalid credentials");
-  }
-  const isPasswordCorrect = await user.comparePassword(password);
-  if (!isPasswordCorrect) {
-    throw new CustomError.NotFoundError("Invalid credentials");
-  }
-  const token = user.createJWT();
-  const oneWeekDuration = new Date(Date.now() + oneWeekInMilliseconds);
-  res
-    .status(StatusCodes.OK)
-    .cookie("user", token, {
-      signed: true,
-      maxAge: oneWeekDuration,
-      httpOnly: false,
-      domain: "project-meme-frontend.vercel.app",
-    })
-    // .cookie("user", token, {
-    //   signed: true,
-    //   maxAge: oneWeekDuration,
-    //   httpOnly: false,
-    // })
-    .json({
-      msg: "Success",
-      token,
-      cookie: cookie.serialize(
-        `user`,
-        String(signature.sign(token, process.env.COOKIE_SIGN))
-      ),
-    });
 };
 
 const logout = async (req, res) => {
