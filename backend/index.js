@@ -84,7 +84,7 @@ if (cluster.isMaster) {
     try {
       await connectDB(uri);
       app.listen(PORT, () =>
-        console.log(`Server ${process.pid} is listening on port ${PORT}...`)
+        console.log(`Server is listening on port ${PORT}...`)
       );
     } catch (err) {
       console.error(err);
