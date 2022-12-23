@@ -30,6 +30,7 @@ const createUser = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  return res.send("yes");
   const { email, password } = req.body;
   if (!email || !password) {
     throw new CustomError.BadRequestError("Provide email and password");
