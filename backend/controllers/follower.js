@@ -22,6 +22,11 @@ const createFollow = async (req, res) => {
       );
     } else {
       await isFollowing.remove();
+      await User.findOneAndUpdate({ _id: userID }, { $inc: { following: -1 } });
+      await User.findOneAndUpdate(
+        { _id: userToBeFollowed },
+        { $inc: { followers: -1 } }
+      );
     }
   } catch (err) {
     return res.status(StatusCodes.BAD_REQUEST).json({ err });
@@ -29,4 +34,17 @@ const createFollow = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ follow });
 };
 
-module.exports = { createFollow };
+const isFollowing = async (req, res) => {
+  const { userID } = req.user;
+  const { userToBeFollowed } = req.body;
+  const isFollowing = await Follower.findOne({
+    userCreatedFollowing: userID,
+    userWhoGotFollowed: userToBeFollowed,
+  });
+  if (!isFollowing) {
+    return res.status(StatusCodes.OK).json({ isFollowing: false });
+  }
+  res.status(StatusCodes.OK).json({ isFollowing: true });
+};
+
+module.exports = { createFollow, isFollowing };
