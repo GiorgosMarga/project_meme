@@ -3,7 +3,7 @@ const Follower = require("../Models/Follower");
 const User = require("../Models/User");
 const createFollow = async (req, res) => {
   const { userID } = req.user;
-  const userToBeFollowed = req.body;
+  const { userToBeFollowed } = req.body;
   let follow;
   const isFollowing = await Follower.findOne({
     userCreatedFollowing: userID,
