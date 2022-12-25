@@ -9,6 +9,7 @@ const userRouter = require("./routers/user");
 const postRouter = require("./routers/post");
 const commentRouter = require("./routers/comments");
 const answerRouter = require("./routers/answer");
+const followerRouter = require("./routers/follower");
 const connectDB = require("./database/connectDB");
 const PORT = process.env.PORT || 3001;
 const fileUpload = require("express-fileupload");
@@ -55,6 +56,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/posts", postRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/answers", answerRouter);
+app.use("/api/v1/follower", followerRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 const start = async (uri) => {
